@@ -1,15 +1,20 @@
 import React, { useState } from "react";
+import "./style/index.css";
+import Asosiy from "./components/MenuLesson/Asosiy";
+import Meva from "./components/MenuLesson/Meva";
 
 function App() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-8 text-indigo-600">
-          Advanced Counter
-        </h1>
-      </div>
-    </div>
-  );
+  const [menu, setMenu] = useState("asosiy");
+
+  if (menu === "asosiy") {
+    return <Asosiy setMenu={setMenu} />;
+  }
+
+  if (menu === "meva") {
+    return <Meva setMenu={setMenu} />;
+  }
+
+  return <div>Topilmadi</div>;
 }
 
 export default App;
