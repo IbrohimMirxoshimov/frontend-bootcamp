@@ -15,7 +15,13 @@ function Navbar({ setMenu }) {
       >
         Mevalar
       </div>
-      <div>Sabzavotlar</div>
+      <div
+        onClick={() => {
+          setMenu("sabzavot");
+        }}
+      >
+        Sabzavotlar
+      </div>
     </nav>
   );
 }
