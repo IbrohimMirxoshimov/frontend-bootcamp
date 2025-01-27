@@ -24,7 +24,7 @@ export default function Modal({ children, open, onClose, title }) {
 
           onClose();
         }}
-        className="fixed bg-black opacity-90 w-full h-full "
+        className="fixed bg-black opacity-50 w-full h-full "
       ></div>
     </div>
   );
