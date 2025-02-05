@@ -1,47 +1,99 @@
+import { useEffect, useState } from "react";
 import "./style/index.css";
+import axios from "axios";
 
 function App() {
-  const arr = [
-    { name: "Ali", scores: [80, 90, 70] },
-    { name: "Zuhra", scores: [85, 95, 100] },
-    { name: "Anvar", scores: [50, 95, 100] },
-  ];
+  // VAZIFA TODO
+  // - api bilan olish kerak
+  // - hammasini ochirish
+  // - har birini o'chirish
+  // - qidirish
+  // - yangi qo'shish
+  // - bajarilgan bo'lsa ustiga chizish va o'zgartirish
+  // - nomini kotta harfda qilib qo'yish (button)
 
-  // CHIQISHI KERAK: kichkina harf bo'ladi
-  // [
-  //   { name: "ali", scores: [80, 90, 70] },
-  //   { name: "zuhra", scores: [85, 95, 100] },
-  //   { name: "anvar", scores: [50, 95, 100] },
-  // ];
+  // - nomini o'zgartirish bosganda modal ochishi kerak va saqlash kerak
 
-  // CHIQISHI KERAK: uzunligi qo'shiladi
-  // [
-  //   { name: "ali", scores: [80, 90, 70], uzunligi: 3 },
-  //   { name: "zuhra", scores: [85, 95, 100], uzunligi: 5 },
-  //   { name: "anvar", scores: [50, 95, 100], uzunligi: 5 },
-  // ];
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState();
 
-  // CHIQISHI KERAK: faqat anvar uzunligi qo'shiladi va kichkina harfda bo'lsin
-  // [
-  //   { name: "Ali", scores: [80, 90, 70] },
-  //   { name: "Zuhra", scores: [85, 95, 100] },
-  //   { name: "anvar", scores: [50, 95, 100], uzunligi: 5 },
-  // ];
+  useEffect(() => {
+    axios
+      .get("https://json-placeholder.mock.beeceptor.com/todos")
+      .then((res) => {
+        console.log(res.data);
+        setTodos(res.data);
+      })
+      .catch(() => {
+        alert("Xatolik");
+      });
+  }, []);
 
-  // CHIQISHI KERAK:
-  // [
-  //   { name: "Ali", scores: [90] },
-  //   { name: "Zuhra", scores: [90, 99] },
-  //   { name: "Anvar", scores: [95, 100] },
-  // ];
+  return (
+    <div className="h-screen m-2 px-12">
+      <input
+        className="border border-gray-600"
+        value={input}
+        onChange={(e) => {
+          setInput(e.currentTarget.value);
+        }}
+      />
 
-  // CHIQISHI KERAK:
-  // [
-  //   { name: "Ali", scores: [90], clone: { name: "Ali", scores: [90] } },
-  //   { name: "Zuhra", scores: [90, 99] },
-  //   { name: "Anvar", scores: [95, 100] },
-  // ];
-  return <div className="h-screen m-2"></div>;
+      {todos
+        .filter((todo) => {
+          if (!input) {
+            return true;
+          }
+
+          return todo.title.toLowerCase().includes(input.toLowerCase());
+        })
+        .map((todo) => {
+          return (
+            <div
+              key={todo.id}
+              className="flex justify-between"
+            >
+              <div className={todo.bajarildi ? "line-through" : ""}>
+                {todo.id}. {todo.title}
+              </div>
+
+              <div>
+                <button
+                  className="mr-3"
+                  onClick={() => {
+                    const new_arr = todos.map((item) => {
+                      if (item.id === todo.id) {
+                        return {
+                          ...item,
+                          bajarildi: !todo.bajarildi,
+                        };
+                      }
+
+                      return item;
+                    });
+
+                    setTodos(new_arr);
+                  }}
+                >
+                  {todo.bajarildi ? "Orqaga qaytar" : "Bajardim"}
+                </button>
+                <button
+                  onClick={() => {
+                    const new_todos = todos.filter((item) => {
+                      return todo.id !== item.id;
+                    });
+
+                    setTodos(new_todos);
+                  }}
+                >
+                  O'chirish
+                </button>
+              </div>
+            </div>
+          );
+        })}
+    </div>
+  );
 }
 
 export default App;
