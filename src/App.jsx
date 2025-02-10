@@ -1,100 +1,74 @@
-import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+import IsmInput from "./components/IsmInput";
+import useMyStore from "./my-store";
 
 function App() {
-  const [savatcha, setSavatcha] = useState([]);
-  const mahsultolar = [
-    {
-      id: 9,
-      name: "Asus",
-    },
-    {
-      id: 2,
-      name: "Hp",
-    },
-    {
-      id: 3,
-      name: "Macbook",
-    },
-  ];
+  const state = useMyStore();
 
-  function onAdd(item) {
-    const bormi = savatcha.find((s) => {
-      if (item.id === s.mahsulot.id) {
-        return true;
-      }
+  function onAdd() {
+    if (state.inputValue.trim() === "") {
+      return;
+    }
 
-      return false;
+    const bormi = state.students.find((item) => {
+      return item.name.toLowerCase() === state.inputValue.toLowerCase();
     });
 
     if (bormi) {
-      // o'zgartiraman
-      const new_arr = savatcha.map((savat_item) => {
-        if (savat_item.mahsulot.id === item.id) {
+      // countni + 1 qilish kerak
+      const new_arr = state.students.map((item) => {
+        if (item.name.toLowerCase() === state.inputValue.toLowerCase()) {
           return {
-            ...savat_item,
-            count: savat_item.count + 1,
+            ...item,
+            count: item.count + 1,
           };
         }
 
-        return savat_item;
+        return item;
       });
 
-      setSavatcha(new_arr);
-    } else {
-      // qo'shaman
-      const new_arr = savatcha.concat({
-        count: 1,
-        mahsulot: item,
+      useMyStore.setState({
+        students: new_arr,
+        inputValue: "",
       });
-      setSavatcha(new_arr);
+    } else {
+      // yo'q bo'lsa
+      // qo'shilish kerak
+      const new_arr = state.students.concat({
+        id: Math.floor(Math.random() * 10000000),
+        name: state.inputValue,
+        count: 1,
+      });
+
+      useMyStore.setState({
+        inputValue: "",
+        students: new_arr,
+      });
     }
   }
 
   return (
     <div className="h-screen m-2">
-      <div className="bg-gray-300 p-2 rounded-lg border mb-2">
-        <h2 className="border-b-2 mb-2 border-gray-600">
-          Savatcha{" "}
-          <span className="rounded-full bg-red-600 px-2 text-white">
-            {savatcha.length}
-          </span>
-        </h2>
-        <div className="text-xs">
-          {savatcha.map((item, index) => {
-            return (
-              <div key={index}>
-                {index + 1}
-                {")"} {item.mahsulot.name} x {item.count}
-              </div>
-            );
-          })}
-        </div>
+      <div>O'quvchilar ro'yxati</div>
+
+      <div className="flex gap-2">
+        <IsmInput onAdd={onAdd} />
+        <Button
+          onClick={onAdd}
+          type="primary"
+          icon={<PlusOutlined />}
+        />
       </div>
 
-      <div className="border bg-gray-300 p-2 rounded-lg">
-        <h2>Mahsultolar</h2>
-
-        <div className="flex gap-2">
-          {mahsultolar.map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="border w-full border-gray-600 bg-white rounded p-2"
-              >
-                <h2>{item.name}</h2>
-
-                <button
-                  onClick={() => {
-                    onAdd(item);
-                  }}
-                  className="bg-gray-500 w-full text-white px-3 rounded"
-                >
-                  +
-                </button>
-              </div>
-            );
-          })}
-        </div>
+      <div className="border rounded border-orange-800 p-2 mt-2">
+        {state.students.map((item, index) => {
+          return (
+            <div key={item.id}>
+              {index + 1}. {item.name} x {item.count}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
