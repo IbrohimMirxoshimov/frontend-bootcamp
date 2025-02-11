@@ -127,23 +127,4 @@ function Navbar({ cart }) {
   );
 }
 
-function Sekundomer() {
-  const [date, set] = useState(new Date());
-
-  useEffect(() => {
-    const a = setInterval(() => {
-      set(new Date());
-    }, 1000);
-
-    return () => {
-      clearInterval(a);
-    };
-  }, []);
-
-  return (
-    <div>
-      {date.getMinutes() + 5}:{date.getSeconds().toString().padStart(2, "0")}
-    </div>
-  );
-}
 export default App;
