@@ -1,47 +1,40 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
+import useMyStore from "../my-store";
 
-function HomePage({ setMenu }) {
-  return (
-    <div>
-      <h2>Home</h2>
-      <Products setMenu={setMenu} />
-    </div>
-  );
-}
-
-export default HomePage;
-
-function Products() {
-  const [products, setProducts] = useState([]);
+export default function HomePage() {
+  const state = useMyStore();
 
   useEffect(() => {
-    fetch("https://api.escuelajs.co/api/v1/products")
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data.slice(5, 17));
+    axios
+      .get(
+        "https://gw.texnomart.uz/api/web/v1/home/special-products?type=new_products"
+      )
+      .then((res) => {
+        useMyStore.setState({
+          loading: false,
+          products: res.data.data.data,
+        });
       });
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {products.map((item) => {
-        return (
-          <Link
-            key={item.id}
-            to={`/product/${item.id}`}
-          >
-            <div className="rounded-lg border p-1 shadow">
-              <img
-                className="rounded-md"
-                src={item.images}
-              />
-
-              <h4 className="text-xs">{item.title}</h4>
-            </div>
-          </Link>
-        );
-      })}
+    <div>
+      <h1 className="text-2xl">Home page</h1>
+      {state.loading ? (
+        <div>Yuklanmoqda...</div>
+      ) : (
+        <div>
+          {state.products.map((product) => {
+            return (
+              <div key={product.id}>
+                <Link to={`/product/${product.id}`}>{product.name}</Link>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
