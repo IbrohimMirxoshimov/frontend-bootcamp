@@ -5,6 +5,8 @@ import ProductPage from "./pages/ProductPage";
 import CatalogPage from "./pages/CatalogPage";
 import { useEffect } from "react";
 import axios from "axios";
+import { Button } from "antd";
+import useMyStore from "./my-store";
 
 function App() {
   return (
@@ -30,15 +32,17 @@ function App() {
 export default App;
 
 function Navbar() {
+  const state = useMyStore();
   return (
     <nav className="mb-4">
-      <div>
+      <div className="flex items-center justify-between mb-2">
         <Link
           to={"/"}
           className="text-2xl bg-blue-300 rounded px-2"
         >
           Logo
         </Link>
+        <Button type="primary">Savat {state.savatcha.length}</Button>
       </div>
       <TopMenu />
     </nav>
@@ -57,7 +61,7 @@ function TopMenu() {
   }, []);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 overflow-x-auto">
       {categories.map((item) => {
         return (
           <Link

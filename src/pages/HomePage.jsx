@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useEffect } from "react";
-import { Link } from "react-router";
-import useMyStore from "../my-store";
+import React, { useEffect, useState } from "react";
+import ProductCard from "../components-mini-shop/ProductCard";
 
 export default function HomePage() {
-  const state = useMyStore();
+  const [productState, set] = useState({
+    products: [],
+    loading: false,
+  });
 
   useEffect(() => {
     axios
@@ -12,29 +14,37 @@ export default function HomePage() {
         "https://gw.texnomart.uz/api/web/v1/home/special-products?type=new_products"
       )
       .then((res) => {
-        useMyStore.setState({
+        set({
           loading: false,
           products: res.data.data.data,
         });
       });
   }, []);
 
+
   return (
     <div>
       <h1 className="text-2xl">Home page</h1>
-      {state.loading ? (
+      {productState.loading ? (
         <div>Yuklanmoqda...</div>
       ) : (
-        <div>
-          {state.products.map((product) => {
-            return (
-              <div key={product.id}>
-                <Link to={`/product/${product.id}`}>{product.name}</Link>
-              </div>
-            );
-          })}
-        </div>
+        <ProductCards products={productState.products} />
       )}
+    </div>
+  );
+}
+
+function ProductCards({ products }) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {products.map((product) => {
+        return (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -1,9 +1,23 @@
 import { create } from "zustand";
 
-const useMyStore = create(() => {
+const useMyStore = create((setState, getState) => {
   return {
-    loading: true,
-    products: [],
+    profile: undefined,
+    liked: [],
+    savatcha: [],
+
+    onAdd(product) {
+      const state = getState();
+
+      const new_savatcha = state.savatcha.concat({
+        count: 1,
+        mahsulot: product,
+      });
+
+      setState({
+        savatcha: new_savatcha,
+      });
+    },
   };
 });
 
