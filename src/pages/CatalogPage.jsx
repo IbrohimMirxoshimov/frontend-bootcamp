@@ -6,54 +6,48 @@ import { Button } from "antd";
 
 function CatalogPage() {
   const params = useParams();
-  console.log(params);
-  
-  const [products, setProducts] = useState();
+
+  const [productsState, setProductsState] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
-    setProducts();
+    setProductsState();
     axios
       .get(
         `https://gw.texnomart.uz/api/common/v1/search/filters?category_all=${params.slug}&sort=-order_count&page=${currentPage}`
       )
       .then((res) => {
-        setProducts(res.data.data.products);
+        setProductsState(res.data.data);
       });
   }, [params.slug, currentPage]);
 
-  if (!products) {
+  if (!productsState) {
     return <>Loading...</>;
   }
-  console.log(currentPage);
 
   return (
     <div>
       <div className="text-2xl">CatalogPage</div>
-      <div>
-        <Button
-          onClick={() => {
-            setCurrentPage(1);
-          }}
-        >
-          1
-        </Button>
-        <Button
-          onClick={() => {
-            setCurrentPage(2);
-          }}
-        >
-          2
-        </Button>
-        <Button
-          onClick={() => {
-            setCurrentPage(3);
-          }}
-        >
-          3
-        </Button>
+      <div className="gap-1 flex flex-wrap mb-2">
+        {Array(productsState.pagination.total_page)
+          .fill(1)
+          .map((_, i) => {
+            const page = i + 1;
+            return (
+              <Button
+                type={currentPage === page ? "primary" : "default"}
+                key={i}
+                onClick={() => {
+                  setCurrentPage(page);
+                }}
+              >
+                {page}
+              </Button>
+            );
+          })}
       </div>
       <div className="grid grid-cols-3 gap-2">
-        {products.map((product) => {
+        {productsState.products.map((product) => {
           return (
             <ProductCard
               key={product.id}

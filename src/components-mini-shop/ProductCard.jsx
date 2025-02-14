@@ -8,27 +8,33 @@ export default function ProductCard({ product }) {
   return (
     <Link
       to={`/product/${product.id}`}
-      className="border shadow rounded p-1 shadow-black"
+      className="border shadow-lg p-1 shadow-slate-400 rounded-lg h-68"
     >
-      <img
-        src={product.image}
-        className="w-32"
-      />
-      <div>{product.name}</div>
-      <div className="font-bold mt-2">
-        {product.sale_price.toLocaleString("ru")} so'm
+      <div className="w-full h-32 overflow-hidden">
+        <img
+          src={product.image}
+          className="w-full bg-cover"
+        />
       </div>
-      <Button
-        type="primary"
-        block
-        onClick={(e) => {
-          e.preventDefault();
+      <div className="flex flex-col justify-between h-36">
+        <div>{product.name}</div>
+        <div>
+          <div className="font-bold mt-2">
+            {product.sale_price.toLocaleString("ru")} so'm
+          </div>
+          <Button
+            type="primary"
+            block
+            onClick={(e) => {
+              e.preventDefault();
 
-          state.onAdd(product);
-        }}
-      >
-        Savatga qo'shish
-      </Button>
+              state.onAdd(product);
+            }}
+          >
+            Savatga qo'shish
+          </Button>
+        </div>
+      </div>
     </Link>
   );
 }
