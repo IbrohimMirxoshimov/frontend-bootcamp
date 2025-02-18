@@ -5,7 +5,7 @@ const useMyStore = create((setState, getState) => {
     profile: undefined,
     liked: [],
     savatcha: [],
-
+    currentSort: "price",
     onAdd(product) {
       const state = getState();
 
