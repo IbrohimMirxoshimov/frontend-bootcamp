@@ -26,6 +26,7 @@ function SideFilter({ filter }) {
 
 function SideFilterValues({ values }) {
   const [expanded, setExpanded] = useState(false);
+  const [checkboxFilter, setCheckboxFilter] = useState({});
 
   return (
     <div>
@@ -34,8 +35,15 @@ function SideFilterValues({ values }) {
           {values.slice(0, 10).map((value) => {
             return (
               <div key={value.id}>
-                <Checkbox>
-                  {value.value} ({value.count})
+                <Checkbox
+                  checked={checkboxFilter[value.id]}
+                  onChange={(e) => {
+                    checkboxFilter[value.id] = e.target.checked;
+
+                    setCheckboxFilter({ ...checkboxFilter });
+                  }}
+                >
+                  {value.value} {value.id}
                 </Checkbox>
               </div>
             );
@@ -45,8 +53,15 @@ function SideFilterValues({ values }) {
         values.map((value) => {
           return (
             <div key={value.id}>
-              <Checkbox>
-                {value.value} ({value.count})
+              <Checkbox
+                checked={checkboxFilter[value.id]}
+                onChange={(e) => {
+                  checkboxFilter[value.id] = e.target.checked;
+
+                  setCheckboxFilter({ ...checkboxFilter });
+                }}
+              >
+                {value.value} {value.id}
               </Checkbox>
             </div>
           );
