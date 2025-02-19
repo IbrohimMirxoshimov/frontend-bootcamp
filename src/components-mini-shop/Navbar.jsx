@@ -3,9 +3,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import useMyStore from "../my-store";
+import LoginButtonWithModal from "./LoginButtonWithModal";
 
 export default function Navbar() {
   const state = useMyStore();
+
   return (
     <nav className="mb-4">
       <div className="flex items-center justify-between mb-2">
@@ -15,7 +17,10 @@ export default function Navbar() {
         >
           Logo
         </Link>
-        <Button type="primary">Savat {state.savatcha.length}</Button>
+        <div>
+          <LoginButtonWithModal />
+          <Button type="primary">Savat {state.savatcha.length}</Button>
+        </div>
       </div>
       <TopMenu />
     </nav>
